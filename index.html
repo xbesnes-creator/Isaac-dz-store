@@ -9,284 +9,322 @@
 :root{
   --gold:#c9a84c;--gold2:#f0d080;--dark:#080810;--dark2:#10101a;
   --glass:rgba(255,255,255,0.06);--glass2:rgba(255,255,255,0.12);
-  --border:rgba(255,255,255,0.15);--text:#f0f0f0;
+  --border:rgba(255,255,255,0.14);--text:#f0f0f0;--green:#4ade80;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{font-family:'Cairo',sans-serif;background:var(--dark);color:var(--text);overflow-x:hidden;min-height:100vh}
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:99999;opacity:.5}
+.ico{display:inline-block;vertical-align:middle;flex-shrink:0}
 
-/* SVG ICON BASE */
-.icon-svg{display:inline-block;vertical-align:middle;flex-shrink:0}
-
-/* ===== LOADER ===== */
-#loader{position:fixed;inset:0;background:var(--dark);z-index:100000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s ease,visibility .8s ease}
+/* ====== LOADER ====== */
+#loader{position:fixed;inset:0;background:var(--dark);z-index:100000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s,visibility .8s}
 #loader.hide{opacity:0;visibility:hidden;pointer-events:none}
-.loader-ring{width:110px;height:110px;border:2px solid rgba(201,168,76,.15);border-top:2px solid var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:28px}
+.l-ring{width:110px;height:110px;border:2px solid rgba(201,168,76,.15);border-top:2px solid var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:26px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loader-logo-text{font-family:'Bebas Neue';font-size:3.2rem;letter-spacing:12px;background:linear-gradient(135deg,#fff 0%,var(--gold) 50%,#fff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200%;animation:shimmer 2s infinite}
+.l-logo{font-family:'Bebas Neue';font-size:3.2rem;letter-spacing:12px;background:linear-gradient(135deg,#fff 0%,var(--gold) 50%,#fff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200%;animation:shimmer 2s infinite}
 @keyframes shimmer{0%{background-position:200%}100%{background-position:-200%}}
-.loader-sub{font-size:.58rem;letter-spacing:8px;color:rgba(201,168,76,.5);margin-top:8px;font-family:'Montserrat'}
+.l-sub{font-size:.57rem;letter-spacing:7px;color:rgba(201,168,76,.45);margin-top:7px;font-family:'Montserrat'}
 
-/* ===== SPLASH ===== */
-#splash{position:fixed;inset:0;background:var(--dark2);z-index:90000;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:30px 20px 40px;overflow-y:auto;opacity:0;visibility:hidden;transition:all .5s ease}
+/* ====== SETUP BANNER (يظهر إذا لم يكن الرابط مضبوطاً) ====== */
+#setupBanner{display:none;background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(201,168,76,.05));border-bottom:1px solid rgba(201,168,76,.3);padding:12px 18px;text-align:center}
+#setupBanner p{font-size:.78rem;color:rgba(255,255,255,.7);line-height:1.7}
+#setupBanner strong{color:var(--gold)}
+#setupBanner button{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;padding:7px 18px;border-radius:20px;font-weight:900;font-size:.75rem;cursor:pointer;margin-top:8px;font-family:'Cairo'}
+
+/* ====== SPLASH ====== */
+#splash{position:fixed;inset:0;background:var(--dark2);z-index:90000;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:28px 20px 40px;overflow-y:auto;opacity:0;visibility:hidden;transition:all .5s}
 #splash.show{opacity:1;visibility:visible}
-.splash-brand{font-family:'Bebas Neue';font-size:2.4rem;letter-spacing:8px;background:linear-gradient(135deg,#fff,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-top:15px}
-.splash-sub{font-size:.58rem;letter-spacing:4px;color:rgba(255,255,255,.35);font-family:'Montserrat';text-align:center;margin-top:4px;margin-bottom:28px}
-.splash-prompt{font-size:.82rem;color:rgba(255,255,255,.55);margin-bottom:18px;font-weight:700;text-align:center}
-.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;width:100%;max-width:420px}
-.cat-card{background:var(--glass);border:1px solid var(--border);border-radius:18px;padding:22px 12px;text-align:center;cursor:pointer;transition:all .3s ease;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);position:relative;overflow:hidden}
+.sp-brand{font-family:'Bebas Neue';font-size:2.4rem;letter-spacing:8px;background:linear-gradient(135deg,#fff,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-top:14px}
+.sp-sub{font-size:.57rem;letter-spacing:4px;color:rgba(255,255,255,.28);font-family:'Montserrat';text-align:center;margin-top:4px;margin-bottom:24px}
+.sp-prompt{font-size:.82rem;color:rgba(255,255,255,.5);margin-bottom:15px;font-weight:700;text-align:center}
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;width:100%;max-width:420px}
+.cat-card{background:var(--glass);border:1px solid var(--border);border-radius:18px;padding:20px 12px;text-align:center;cursor:pointer;transition:.3s;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);position:relative;overflow:hidden}
 .cat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,168,76,.1),transparent);opacity:0;transition:.3s}
-.cat-card:hover::before,.cat-card:active::before{opacity:1}
-.cat-card:hover,.cat-card:active{border-color:var(--gold);transform:scale(1.02)}
-.cat-emoji{font-size:2.2rem;margin-bottom:8px;display:block}
-.cat-name{font-weight:800;font-size:.85rem;color:#fff}
-.cat-sub{font-size:.65rem;color:var(--gold);margin-top:2px}
-.splash-all{margin-top:20px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;padding:14px 48px;border-radius:50px;font-weight:900;font-size:.95rem;cursor:pointer;font-family:'Cairo';letter-spacing:2px;transition:.3s}
-.splash-all:hover{transform:scale(1.03);box-shadow:0 10px 30px rgba(201,168,76,.4)}
+.cat-card:active::before,.cat-card:hover::before{opacity:1}
+.cat-card:active,.cat-card:hover{border-color:var(--gold);transform:scale(1.02)}
+.cat-emoji{font-size:2.1rem;margin-bottom:7px;display:block}
+.cat-nm{font-weight:800;font-size:.83rem;color:#fff}
+.cat-s{font-size:.63rem;color:var(--gold);margin-top:2px}
+.sp-all{margin-top:18px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;padding:13px 46px;border-radius:50px;font-weight:900;font-size:.93rem;cursor:pointer;font-family:'Cairo';transition:.3s}
+.sp-all:hover{transform:scale(1.03);box-shadow:0 10px 28px rgba(201,168,76,.4)}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .fu{animation:fadeUp .5s ease forwards;opacity:0}
 .fu:nth-child(1){animation-delay:.05s}.fu:nth-child(2){animation-delay:.1s}
 .fu:nth-child(3){animation-delay:.15s}.fu:nth-child(4){animation-delay:.2s}
 .fu:nth-child(5){animation-delay:.25s}.fu:nth-child(6){animation-delay:.3s}
 
-/* ===== HEADER ===== */
-header{display:flex;justify-content:space-between;align-items:center;padding:15px 18px;background:rgba(8,8,16,.92);position:sticky;top:0;z-index:1000;border-bottom:1px solid var(--border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+/* ====== HEADER ====== */
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:rgba(8,8,16,.93);position:sticky;top:0;z-index:1000;border-bottom:1px solid var(--border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 .logo-area{text-align:center;flex:1}
-.logo-area h1{font-family:'Bebas Neue';font-size:1.9rem;letter-spacing:5px;background:linear-gradient(135deg,#fff,var(--gold),#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.logo-area p{font-size:.48rem;letter-spacing:4px;color:rgba(201,168,76,.55);font-family:'Montserrat'}
-.hdr-btn{background:none;border:none;cursor:pointer;padding:7px;border-radius:10px;transition:.3s;display:flex;align-items:center;justify-content:center}
-.hdr-btn:hover{background:rgba(255,255,255,.07)}
+.logo-area h1{font-family:'Bebas Neue';font-size:1.85rem;letter-spacing:5px;background:linear-gradient(135deg,#fff,var(--gold),#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;cursor:pointer}
+.logo-area p{font-size:.47rem;letter-spacing:4px;color:rgba(201,168,76,.48);font-family:'Montserrat'}
+.hbtn{background:none;border:none;cursor:pointer;padding:7px;border-radius:10px;transition:.3s;display:flex;align-items:center;justify-content:center;text-decoration:none}
+.hbtn:hover{background:rgba(255,255,255,.07)}
 
-/* ===== PROMO BAR ===== */
-.promo-bar{background:linear-gradient(90deg,#0d0d1a,#16102a,#0d0d1a);border-bottom:1px solid rgba(201,168,76,.25);padding:9px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.promo-text{font-size:.72rem;font-weight:700;color:#fff;text-align:right}
-.promo-text span{color:var(--gold);font-size:.6rem;display:block;font-weight:400}
+/* ====== PROMO BAR ====== */
+.promo-bar{background:linear-gradient(90deg,#0d0d1a,#16102a,#0d0d1a);border-bottom:1px solid rgba(201,168,76,.2);padding:9px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px}
 .timer-wrap{display:flex;gap:5px;direction:ltr;flex-shrink:0}
-.t-box{background:rgba(201,168,76,.09);border:1px solid rgba(201,168,76,.25);border-radius:6px;padding:3px 8px;text-align:center;min-width:38px}
-.t-box b{display:block;color:var(--gold);font-size:.95rem;font-family:'Montserrat';font-weight:900;line-height:1.2}
-.t-box s{display:block;color:rgba(255,255,255,.35);font-size:.48rem;text-decoration:none;font-family:'Cairo'}
+.t-box{background:rgba(201,168,76,.09);border:1px solid rgba(201,168,76,.2);border-radius:6px;padding:3px 8px;text-align:center;min-width:36px}
+.t-box b{display:block;color:var(--gold);font-size:.92rem;font-family:'Montserrat';font-weight:900;line-height:1.2}
+.t-box s{display:block;color:rgba(255,255,255,.28);font-size:.47rem;text-decoration:none}
+.promo-right{text-align:right}
+.promo-right .pt{font-size:.7rem;font-weight:700;color:#fff;display:flex;align-items:center;gap:4px;justify-content:flex-end}
+.promo-right .ps{color:var(--gold);font-size:.58rem;display:block;margin-top:1px}
 
-/* ===== SHIP BAR ===== */
-.ship-bar{background:rgba(10,10,20,.97);padding:10px 18px;text-align:center;border-bottom:1px solid var(--border)}
-.ship-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(40,200,100,.08);border:1px solid rgba(40,200,100,.25);color:#4ade80;padding:8px 18px;border-radius:50px;font-size:.73rem;font-weight:800;cursor:pointer;transition:.3s;font-family:'Cairo'}
-.ship-btn:hover{background:rgba(40,200,100,.17);transform:scale(1.02)}
+/* ====== SHIP BAR ====== */
+.ship-bar{background:rgba(10,10,20,.97);padding:9px 18px;text-align:center;border-bottom:1px solid var(--border)}
+.ship-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(40,200,100,.07);border:1px solid rgba(40,200,100,.2);color:var(--green);padding:8px 18px;border-radius:50px;font-size:.72rem;font-weight:800;cursor:pointer;transition:.3s;font-family:'Cairo'}
+.ship-btn:hover{background:rgba(40,200,100,.14);transform:scale(1.02)}
 
-/* ===== FILTER BAR ===== */
-.cat-filter{display:flex;gap:7px;padding:12px 18px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;background:rgba(10,10,20,.85);border-bottom:1px solid var(--border)}
+/* ====== FILTER BAR ====== */
+.cat-filter{display:flex;gap:7px;padding:11px 16px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;background:rgba(10,10,20,.85);border-bottom:1px solid var(--border)}
 .cat-filter::-webkit-scrollbar{display:none}
-.filter-btn{white-space:nowrap;background:var(--glass);border:1px solid var(--border);color:rgba(255,255,255,.65);padding:7px 15px;border-radius:50px;font-size:.72rem;font-weight:700;cursor:pointer;transition:.3s;font-family:'Cairo';flex-shrink:0}
+.filter-btn{white-space:nowrap;background:var(--glass);border:1px solid var(--border);color:rgba(255,255,255,.58);padding:7px 13px;border-radius:50px;font-size:.7rem;font-weight:700;cursor:pointer;transition:.3s;font-family:'Cairo';flex-shrink:0}
 .filter-btn:hover,.filter-btn.active{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border-color:transparent}
 
-/* ===== GRID ===== */
-.section-lbl{text-align:center;padding:22px 20px 12px;font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:5px;color:rgba(255,255,255,.25);display:flex;align-items:center;gap:10px;justify-content:center}
-.section-lbl::before,.section-lbl::after{content:'';flex:1;height:1px;background:rgba(201,168,76,.2)}
+/* ====== PRODUCT GRID ====== */
+.sec-lbl{text-align:center;padding:20px 20px 10px;font-family:'Bebas Neue';font-size:1.25rem;letter-spacing:5px;color:rgba(255,255,255,.2);display:flex;align-items:center;gap:10px;justify-content:center}
+.sec-lbl::before,.sec-lbl::after{content:'';flex:1;height:1px;background:rgba(201,168,76,.16)}
+
+/* Loading skeleton */
+.skeleton-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.04)}
+.skeleton-card{background:var(--dark2);padding:18px 12px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.skel{background:rgba(255,255,255,.06);border-radius:8px;animation:skelPulse 1.5s ease infinite}
+@keyframes skelPulse{0%,100%{opacity:.5}50%{opacity:1}}
+.skel-img{width:100%;aspect-ratio:1/1;border-radius:12px}
+.skel-line{height:12px;width:80%}.skel-line2{height:12px;width:55%}
+.skel-btn{height:38px;width:100%;border-radius:9px}
+
 .prod-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.04)}
-.prod-card{background:var(--dark2);display:flex;flex-direction:column;align-items:center;padding:18px 13px;position:relative;overflow:hidden;cursor:pointer;transition:.3s}
-.prod-card:hover{background:#14141f}
-.prod-badge{position:absolute;top:10px;right:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;font-size:.52rem;font-weight:900;padding:3px 8px;border-radius:20px;font-family:'Montserrat';z-index:2;letter-spacing:.5px}
-.prod-img-wrap{width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;margin-bottom:12px;background:rgba(255,255,255,.03);border:1px solid var(--border)}
+.prod-card{background:var(--dark2);display:flex;flex-direction:column;align-items:center;padding:17px 12px;position:relative;overflow:hidden;cursor:pointer;transition:.25s}
+.prod-card:hover{background:#13131f}
+.prod-badge{position:absolute;top:10px;right:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;font-size:.5rem;font-weight:900;padding:3px 8px;border-radius:20px;font-family:'Montserrat';z-index:2}
+.prod-img-wrap{width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;margin-bottom:11px;background:rgba(255,255,255,.03);border:1px solid var(--border)}
 .prod-img-wrap img{width:100%;height:100%;object-fit:cover;transition:.4s;display:block}
 .prod-card:hover .prod-img-wrap img{transform:scale(1.07)}
-.prod-cat-lbl{font-size:.57rem;color:var(--gold);font-weight:700;letter-spacing:2px;font-family:'Montserrat';margin-bottom:4px;text-transform:uppercase}
-.prod-name{font-size:.8rem;font-weight:700;color:rgba(255,255,255,.88);text-align:center;margin-bottom:7px;line-height:1.4}
-.prod-price{font-size:1.1rem;font-weight:900;color:#fff;font-family:'Montserrat';margin-bottom:13px}
-.prod-price span{font-size:.65rem;color:rgba(255,255,255,.35);font-weight:400;font-family:'Cairo'}
-.buy-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;padding:10px;width:100%;border-radius:9px;font-weight:900;font-size:.78rem;cursor:pointer;font-family:'Cairo';display:flex;align-items:center;justify-content:center;gap:6px;transition:.3s}
+.prod-cat{font-size:.55rem;color:var(--gold);font-weight:700;letter-spacing:2px;font-family:'Montserrat';margin-bottom:3px;text-transform:uppercase}
+.prod-name{font-size:.78rem;font-weight:700;color:rgba(255,255,255,.87);text-align:center;margin-bottom:6px;line-height:1.4}
+.prod-price{font-size:1.05rem;font-weight:900;color:#fff;font-family:'Montserrat';margin-bottom:12px}
+.prod-price span{font-size:.6rem;color:rgba(255,255,255,.28);font-weight:400;font-family:'Cairo'}
+.buy-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;padding:10px;width:100%;border-radius:9px;font-weight:900;font-size:.76rem;cursor:pointer;font-family:'Cairo';display:flex;align-items:center;justify-content:center;gap:6px;transition:.3s}
 .buy-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(201,168,76,.4)}
-.empty-state{grid-column:span 2;padding:55px 20px;text-align:center;color:rgba(255,255,255,.25)}
-.empty-state svg{margin-bottom:14px;display:block;margin-left:auto;margin-right:auto;opacity:.3}
+.empty-state{padding:60px 20px;text-align:center;color:rgba(255,255,255,.2)}
+.empty-state .big-ico{font-size:3.5rem;margin-bottom:14px;display:block;filter:grayscale(1);opacity:.3}
+.empty-state h3{font-size:1rem;margin-bottom:6px;color:rgba(255,255,255,.35)}
+.empty-state p{font-size:.72rem;line-height:1.7}
 
-/* ===== OVERLAY / MODALS ===== */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:50000;display:none;align-items:flex-end;justify-content:center}
+/* ====== MODALS ====== */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.83);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:50000;display:none;align-items:flex-end;justify-content:center}
 .overlay.center{align-items:center;padding:20px}
 .overlay.show{display:flex}
-.sheet{background:linear-gradient(180deg,rgba(16,16,28,.99) 0%,rgba(10,10,18,.99) 100%);border:1px solid var(--border);border-radius:24px 24px 0 0;width:100%;max-width:480px;padding:26px 20px 38px;max-height:90vh;overflow-y:auto}
-.sheet.rounded{border-radius:22px;max-height:88vh}
-.sheet-handle{width:38px;height:4px;background:rgba(255,255,255,.18);border-radius:4px;margin:0 auto 18px}
-.sheet h2{font-weight:900;margin-bottom:16px;font-size:1.05rem;display:flex;align-items:center;gap:8px;color:#fff}
-.inp{width:100%;background:var(--glass);border:1px solid var(--border);color:#fff;padding:12px 15px;border-radius:11px;font-family:'Cairo';font-weight:600;font-size:.88rem;margin-bottom:9px;outline:none;transition:.3s}
+.sheet{background:linear-gradient(180deg,rgba(16,16,28,.99),rgba(10,10,18,.99));border:1px solid var(--border);border-radius:24px 24px 0 0;width:100%;max-width:480px;padding:24px 20px 36px;max-height:92vh;overflow-y:auto}
+.sheet.rounded{border-radius:22px;max-height:90vh}
+.s-handle{width:36px;height:4px;background:rgba(255,255,255,.16);border-radius:4px;margin:0 auto 17px}
+.sheet h2{font-weight:900;margin-bottom:15px;font-size:1.03rem;display:flex;align-items:center;gap:8px;color:#fff}
+.inp{width:100%;background:var(--glass);border:1px solid var(--border);color:#fff;padding:12px 15px;border-radius:11px;font-family:'Cairo';font-weight:600;font-size:.87rem;margin-bottom:9px;outline:none;transition:.3s}
 .inp:focus{border-color:var(--gold);background:rgba(201,168,76,.07)}
 .inp option{background:#1a1a2e;color:#fff}
-.btn{width:100%;padding:13px;border:none;border-radius:11px;font-weight:900;font-size:.92rem;cursor:pointer;font-family:'Cairo';margin-top:7px;transition:.3s;display:flex;align-items:center;justify-content:center;gap:8px}
+.inp::placeholder{color:rgba(255,255,255,.3)}
+.inp-lbl{font-size:.7rem;color:rgba(255,255,255,.4);margin-bottom:4px;display:block;font-weight:700;letter-spacing:1px}
+.btn{width:100%;padding:13px;border:none;border-radius:11px;font-weight:900;font-size:.9rem;cursor:pointer;font-family:'Cairo';margin-top:7px;transition:.3s;display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000}
 .btn-gold:hover{box-shadow:0 8px 22px rgba(201,168,76,.4);transform:translateY(-1px)}
+.btn-gold:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .btn-dark{background:var(--glass2);color:#fff;border:1px solid var(--border)}
 .btn-red{background:rgba(200,30,30,.8);color:#fff}
-.btn-red:hover{background:rgba(220,40,40,.9)}
 
-/* ===== ORDER PRODUCT INFO ===== */
-.order-pinfo{background:var(--glass);border:1px solid var(--border);border-radius:13px;padding:13px;margin-bottom:16px;display:flex;align-items:center;gap:12px}
-.order-pinfo img{width:58px;height:58px;object-fit:cover;border-radius:9px;border:1px solid var(--border)}
-.order-pinfo h4{font-size:.82rem;font-weight:800;margin-bottom:3px;color:#fff}
-.order-pinfo p{color:var(--gold);font-weight:900;font-family:'Montserrat';font-size:.95rem}
+/* Status badge */
+.status-dot{width:8px;height:8px;border-radius:50%;background:#555;display:inline-block;margin-left:6px;transition:.3s}
+.status-dot.connected{background:var(--green);box-shadow:0 0 8px var(--green)}
+.status-dot.error{background:#f87171;box-shadow:0 0 8px #f87171}
 
-/* ===== WILAYAS ===== */
-.wilayas-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin:13px 0;max-height:280px;overflow-y:auto}
-.w-chip{background:rgba(40,200,100,.07);border:1px solid rgba(40,200,100,.18);color:#4ade80;padding:5px 6px;border-radius:7px;font-size:.6rem;font-weight:700;text-align:center;font-family:'Montserrat';line-height:1.3}
+/* ORDER */
+.o-pinfo{background:var(--glass);border:1px solid var(--border);border-radius:13px;padding:12px;margin-bottom:15px;display:flex;align-items:center;gap:12px}
+.o-pinfo img{width:56px;height:56px;object-fit:cover;border-radius:9px;border:1px solid var(--border)}
+.o-pinfo h4{font-size:.8rem;font-weight:800;margin-bottom:3px;color:#fff}
+.o-pinfo p{color:var(--gold);font-weight:900;font-family:'Montserrat';font-size:.92rem}
 
-/* ===== DELETE LIST ===== */
-.del-list{max-height:200px;overflow-y:auto;margin:8px 0}
-.del-item{display:flex;justify-content:space-between;align-items:center;background:var(--glass);border:1px solid var(--border);border-radius:9px;padding:9px 11px;margin-bottom:5px;font-size:.8rem;font-weight:700;gap:8px}
-.del-item span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.del-item button{background:rgba(200,30,30,.75);border:none;color:#fff;padding:5px 10px;border-radius:7px;cursor:pointer;font-size:.72rem;font-family:'Cairo';font-weight:800;flex-shrink:0}
+/* WILAYAS */
+.w-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin:11px 0;max-height:270px;overflow-y:auto}
+.w-chip{background:rgba(40,200,100,.06);border:1px solid rgba(40,200,100,.15);color:var(--green);padding:5px 5px;border-radius:7px;font-size:.59rem;font-weight:700;text-align:center;font-family:'Montserrat';line-height:1.3}
 
-/* ===== FILE UPLOAD ===== */
-.file-lbl{display:block;background:var(--glass);border:2px dashed rgba(201,168,76,.35);border-radius:11px;padding:17px;text-align:center;cursor:pointer;color:rgba(255,255,255,.55);font-size:.82rem;margin-bottom:9px;transition:.3s}
+/* DELETE LIST */
+.del-list{max-height:220px;overflow-y:auto;margin:8px 0}
+.del-item{display:flex;justify-content:space-between;align-items:center;background:var(--glass);border:1px solid var(--border);border-radius:9px;padding:9px 11px;margin-bottom:5px;gap:8px}
+.del-item-info{flex:1;overflow:hidden}
+.del-item-name{font-size:.78rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.del-item-price{font-size:.63rem;color:var(--gold);font-weight:700}
+.del-item button{background:rgba(200,30,30,.7);border:none;color:#fff;padding:6px 10px;border-radius:7px;cursor:pointer;font-size:.7rem;font-family:'Cairo';font-weight:800;flex-shrink:0;display:flex;align-items:center;gap:4px}
+
+/* FILE UPLOAD */
+.file-lbl{display:block;background:var(--glass);border:2px dashed rgba(201,168,76,.28);border-radius:11px;padding:16px;text-align:center;cursor:pointer;color:rgba(255,255,255,.45);font-size:.8rem;margin-bottom:9px;transition:.3s}
 .file-lbl:hover{border-color:var(--gold);background:rgba(201,168,76,.05)}
-.img-preview{width:100%;height:150px;object-fit:contain;border-radius:11px;border:1px solid var(--border);margin-bottom:9px;display:none;background:rgba(255,255,255,.03)}
+.img-preview{width:100%;height:145px;object-fit:contain;border-radius:11px;border:1px solid var(--border);margin-bottom:9px;display:none;background:rgba(255,255,255,.03)}
 
-/* ===== WA FLOAT ===== */
-.wa-float{position:fixed;bottom:24px;left:18px;background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(37,211,102,.4);z-index:9999;text-decoration:none;transition:.3s;animation:waP 2.5s infinite}
-@keyframes waP{0%,100%{box-shadow:0 8px 22px rgba(37,211,102,.4)}50%{box-shadow:0 8px 32px rgba(37,211,102,.7),0 0 0 8px rgba(37,211,102,.08)}}
+/* PROGRESS BAR */
+.progress-wrap{background:rgba(255,255,255,.06);border-radius:6px;height:6px;margin:8px 0;overflow:hidden;display:none}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));width:0%;transition:width .3s;border-radius:6px}
+
+/* SHEET LINK INPUT */
+.sheet-url-wrap{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:14px;margin-bottom:14px}
+.sheet-url-wrap p{font-size:.72rem;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:10px}
+.sheet-url-wrap .steps{font-size:.68rem;color:rgba(255,255,255,.35);line-height:2;margin-bottom:8px;counter-reset:step}
+.step{display:flex;gap:6px;align-items:flex-start;margin-bottom:4px}
+.step-num{background:var(--gold);color:#000;width:18px;height:18px;border-radius:50%;font-size:.6rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-txt{font-size:.67rem;color:rgba(255,255,255,.4);line-height:1.5}
+
+/* WA FLOAT */
+.wa-float{position:fixed;bottom:24px;left:18px;background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(37,211,102,.4);z-index:9999;text-decoration:none;transition:.3s;animation:waP 2.5s infinite}
+@keyframes waP{0%,100%{box-shadow:0 8px 22px rgba(37,211,102,.4)}50%{box-shadow:0 8px 32px rgba(37,211,102,.7),0 0 0 8px rgba(37,211,102,.07)}}
 .wa-float:hover{transform:scale(1.1)}
 
-/* ===== FOOTER ===== */
-footer{background:rgba(5,5,10,.97);border-top:1px solid var(--border);padding:28px 20px;text-align:center;margin-top:16px}
-.foot-brand{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:7px;background:linear-gradient(135deg,#fff,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:7px}
-footer p{font-size:.68rem;color:rgba(255,255,255,.28);line-height:1.9}
-.social-row{display:flex;gap:18px;justify-content:center;margin:14px 0;align-items:center}
-.social-row a{color:rgba(255,255,255,.45);transition:.3s;text-decoration:none;display:flex;align-items:center}
-.social-row a:hover{color:var(--gold);transform:scale(1.15)}
+/* TOAST */
+#toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(20,20,35,.95);border:1px solid var(--border);color:#fff;padding:10px 20px;border-radius:50px;font-size:.78rem;font-weight:700;z-index:200000;opacity:0;transition:.3s;white-space:nowrap;pointer-events:none;backdrop-filter:blur(10px)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.success{border-color:var(--green);color:var(--green)}
+#toast.error{border-color:#f87171;color:#f87171}
+
+/* FOOTER */
+footer{background:rgba(5,5,10,.97);border-top:1px solid var(--border);padding:26px 20px;text-align:center;margin-top:14px}
+.f-brand{font-family:'Bebas Neue';font-size:1.75rem;letter-spacing:7px;background:linear-gradient(135deg,#fff,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+.soc-row{display:flex;gap:20px;justify-content:center;margin:13px 0;align-items:center}
+.soc-row a{color:rgba(255,255,255,.38);transition:.3s;text-decoration:none;display:flex;align-items:center}
+.soc-row a:hover{color:var(--gold);transform:scale(1.15)}
+footer p{font-size:.66rem;color:rgba(255,255,255,.24);line-height:1.9}
 </style>
 </head>
 <body>
 
-<!-- ===== SVG DEFS (inline icons library) ===== -->
-<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Instagram -->
-  <symbol id="ico-insta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-    <circle cx="12" cy="12" r="4"/>
-    <circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/>
+<!-- ===== SVG ICONS ===== -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="i-insta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/>
+    <circle cx="17.5" cy="6.5" r=".9" fill="currentColor" stroke="none"/>
   </symbol>
-  <!-- WhatsApp -->
-  <symbol id="ico-wa" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+  <symbol id="i-wa" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
   </symbol>
-  <!-- TikTok -->
-  <symbol id="ico-tiktok" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.22 8.22 0 0 0 4.84 1.56V6.78a4.85 4.85 0 0 1-1.07-.09Z"/>
+  <symbol id="i-tiktok" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.22 8.22 0 004.84 1.56V6.78a4.85 4.85 0 01-1.07-.09z"/>
   </symbol>
-  <!-- Truck -->
-  <symbol id="ico-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="1" y="3" width="15" height="13" rx="1"/>
-    <path d="M16 8h4l3 5v4h-7V8z"/>
+  <symbol id="i-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/>
     <circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
   </symbol>
-  <!-- Bag -->
-  <symbol id="ico-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-    <line x1="3" y1="6" x2="21" y2="6"/>
-    <path d="M16 10a4 4 0 0 1-8 0"/>
+  <symbol id="i-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/>
+    <path d="M16 10a4 4 0 01-8 0"/>
   </symbol>
-  <!-- Camera -->
-  <symbol id="ico-cam" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-    <circle cx="12" cy="13" r="4"/>
+  <symbol id="i-cam" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/>
   </symbol>
-  <!-- Plus -->
-  <symbol id="ico-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
     <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
   </symbol>
-  <!-- Trash -->
-  <symbol id="ico-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-    <path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+  <symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+    <path d="M10 11v6M14 11v6M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
   </symbol>
-  <!-- Check -->
-  <symbol id="ico-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
     <polyline points="20 6 9 17 4 12"/>
   </symbol>
-  <!-- Lock -->
-  <symbol id="ico-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+  <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
   </symbol>
-  <!-- Settings -->
-  <symbol id="ico-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="3"/>
-    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+  <symbol id="i-cog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
   </symbol>
-  <!-- Box open -->
-  <symbol id="ico-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/>
-    <line x1="10" y1="12" x2="14" y2="12"/>
+  <symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
   </symbol>
-  <!-- Chevron left -->
-  <symbol id="ico-chevron-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-    <polyline points="15 18 9 12 15 6"/>
-  
+  <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
   </symbol>
-  <!-- Lightning -->
-  <symbol id="ico-bolt" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+  <symbol id="i-bolt" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
+  <symbol id="i-chevl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+  </symbol>
+  <symbol id="i-sheets" viewBox="0 0 24 24" fill="currentColor">
+    <path fill="#34A853" d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"/>
+    <path fill="#fff" fill-opacity=".7" d="M14 2v6h6"/>
+    <path fill="#fff" d="M8 13h8v1.5H8zm0 3h8v1.5H8zm0-6h4v1.5H8z"/>
   </symbol>
 </svg>
 
-<!-- ===== LOADER ===== -->
+<!-- LOADER -->
 <div id="loader">
-  <div class="loader-ring"></div>
-  <div class="loader-logo-text">ISAAC</div>
-  <div class="loader-sub">STORE × ELITE SELECTION</div>
+  <div class="l-ring"></div>
+  <div class="l-logo">ISAAC</div>
+  <div class="l-sub">STORE × ELITE SELECTION</div>
 </div>
 
-<!-- ===== SPLASH / CATEGORY SELECT ===== -->
+<!-- SPLASH -->
 <div id="splash">
-  <div class="splash-brand">ISAAC STORE</div>
-  <div class="splash-sub">REDEFINING ALGERIAN LUXURY</div>
-  <div class="splash-prompt">اختر الصنف الذي يهمك 👇</div>
+  <div class="sp-brand">ISAAC STORE</div>
+  <div class="sp-sub">REDEFINING ALGERIAN LUXURY</div>
+  <div class="sp-prompt">اختر الصنف الذي يهمك 👇</div>
   <div class="cat-grid">
-    <div class="cat-card fu" onclick="enterCat('نضارات مoto')"><span class="cat-emoji">🥽</span><div class="cat-name">نضارات Moto</div><div class="cat-sub">درجات نارية</div></div>
-    <div class="cat-card fu" onclick="enterCat('ساعات')"><span class="cat-emoji">⌚</span><div class="cat-name">ساعات</div><div class="cat-sub">Montres</div></div>
-    <div class="cat-card fu" onclick="enterCat('قبعات')"><span class="cat-emoji">🧢</span><div class="cat-name">قبعات</div><div class="cat-sub">Casquettes</div></div>
-    <div class="cat-card fu" onclick="enterCat('نضارات شمسية')"><span class="cat-emoji">🕶️</span><div class="cat-name">نضارات شمسية</div><div class="cat-sub">Lunettes</div></div>
-    <div class="cat-card fu" onclick="enterCat('اكسسوارات')"><span class="cat-emoji">💎</span><div class="cat-name">اكسسوارات</div><div class="cat-sub">Accessoires</div></div>
-    <div class="cat-card fu" onclick="enterCat('حقائب')"><span class="cat-emoji">👜</span><div class="cat-name">حقائب</div><div class="cat-sub">Sacs</div></div>
+    <div class="cat-card fu" onclick="enterCat('نضارات مoto')"><span class="cat-emoji">🥽</span><div class="cat-nm">نضارات Moto</div><div class="cat-s">درجات نارية</div></div>
+    <div class="cat-card fu" onclick="enterCat('ساعات')"><span class="cat-emoji">⌚</span><div class="cat-nm">ساعات</div><div class="cat-s">Montres</div></div>
+    <div class="cat-card fu" onclick="enterCat('قبعات')"><span class="cat-emoji">🧢</span><div class="cat-nm">قبعات</div><div class="cat-s">Casquettes</div></div>
+    <div class="cat-card fu" onclick="enterCat('نضارات شمسية')"><span class="cat-emoji">🕶️</span><div class="cat-nm">نضارات شمسية</div><div class="cat-s">Lunettes</div></div>
+    <div class="cat-card fu" onclick="enterCat('اكسسوارات')"><span class="cat-emoji">💎</span><div class="cat-nm">اكسسوارات</div><div class="cat-s">Accessoires</div></div>
+    <div class="cat-card fu" onclick="enterCat('حقائب')"><span class="cat-emoji">👜</span><div class="cat-nm">حقائب</div><div class="cat-s">Sacs</div></div>
   </div>
-  <button class="splash-all" onclick="enterCat('all')">🛍️ عرض الكل</button>
+  <button class="sp-all" onclick="enterCat('all')">🛍️ عرض الكل</button>
 </div>
 
-<!-- ===== HEADER ===== -->
+<!-- SETUP BANNER -->
+<div id="setupBanner">
+  <p>⚙️ المتجر غير مربوط بـ Google Sheets بعد<br><strong>اضغط على اسم المتجر للإعداد</strong> — يستغرق أقل من دقيقتين!</p>
+  <button onclick="openAdminLogin()">🔧 إعداد المتجر الآن</button>
+</div>
+
+<!-- HEADER -->
 <header>
-  <a href="https://instagram.com/isaac._store" target="_blank" class="hdr-btn" style="color:#E1306C;text-decoration:none">
-    <svg class="icon-svg" width="26" height="26"><use href="#ico-insta"/></svg>
+  <a href="https://instagram.com/isaac._store" target="_blank" class="hbtn" style="color:#E1306C">
+    <svg class="ico" width="27" height="27"><use href="#i-insta"/></svg>
   </a>
-  <div class="logo-area" onclick="openAdminLogin()" style="cursor:pointer">
-    <h1>ISAAC STORE</h1>
+  <div class="logo-area">
+    <h1 onclick="openAdminLogin()">ISAAC STORE</h1>
     <p>REDEFINING ALGERIAN LUXURY</p>
   </div>
-  <a href="https://wa.me/213777668129" target="_blank" class="hdr-btn" style="color:#25d366;text-decoration:none">
-    <svg class="icon-svg" width="26" height="26"><use href="#ico-wa"/></svg>
+  <a href="https://wa.me/213777668129" target="_blank" class="hbtn" style="color:#25d366">
+    <svg class="ico" width="27" height="27"><use href="#i-wa"/></svg>
   </a>
 </header>
 
-<!-- ===== PROMO BAR ===== -->
+<!-- PROMO BAR -->
 <div class="promo-bar">
   <div class="timer-wrap">
     <div class="t-box"><b id="t-s">00</b><s>ثانية</s></div>
     <div class="t-box"><b id="t-m">45</b><s>دقيقة</s></div>
     <div class="t-box"><b id="t-h">02</b><s>ساعة</s></div>
   </div>
-  <div class="promo-text">
-    <svg class="icon-svg" width="13" height="13" style="color:var(--gold);margin-left:3px"><use href="#ico-bolt"/></svg>
-    عروض محدودة الوقت<span>سارع قبل نفاد الكمية</span>
+  <div class="promo-right">
+    <div class="pt">
+      <svg class="ico" width="13" height="13" style="color:var(--gold)"><use href="#i-bolt"/></svg>
+      عروض محدودة الوقت
+    </div>
+    <span class="ps">سارع قبل نفاد الكمية</span>
   </div>
 </div>
 
-<!-- ===== SHIP BAR ===== -->
+<!-- SHIP BAR -->
 <div class="ship-bar">
   <button class="ship-btn" onclick="openWilayas()">
-    <svg class="icon-svg" width="16" height="16"><use href="#ico-truck"/></svg>
-    <span>التوصيل: IMIR Logistics — 69 ولاية 🇩🇿</span>
-    <svg class="icon-svg" width="13" height="13" style="opacity:.7"><use href="#ico-chevron-l"/></svg>
+    <svg class="ico" width="16" height="16"><use href="#i-truck"/></svg>
+    التوصيل: IMIR Logistics — 69 ولاية 🇩🇿
+    <svg class="ico" width="13" height="13" style="opacity:.55"><use href="#i-chevl"/></svg>
   </button>
 </div>
 
-<!-- ===== FILTER BAR ===== -->
+<!-- FILTER BAR -->
 <div class="cat-filter">
   <button class="filter-btn active" onclick="setFilter('all',this)">🛍️ الكل</button>
-  <button class="filter-btn" onclick="setFilter('نضارات مoto',this)">🥽 نضارات Moto</button>
+  <button class="filter-btn" onclick="setFilter('نضارات مoto',this)">🥽 Moto</button>
   <button class="filter-btn" onclick="setFilter('ساعات',this)">⌚ ساعات</button>
   <button class="filter-btn" onclick="setFilter('قبعات',this)">🧢 قبعات</button>
   <button class="filter-btn" onclick="setFilter('نضارات شمسية',this)">🕶️ نضارات</button>
@@ -294,105 +332,135 @@ footer p{font-size:.68rem;color:rgba(255,255,255,.28);line-height:1.9}
   <button class="filter-btn" onclick="setFilter('حقائب',this)">👜 حقائب</button>
 </div>
 
-<div class="section-lbl" id="gridTitle">COLLECTION</div>
-<div class="prod-grid" id="productGrid"></div>
+<div class="sec-lbl" id="gridTitle">COLLECTION</div>
+<div id="productGrid"></div>
 
-<!-- ===== FOOTER ===== -->
+<!-- FOOTER -->
 <footer>
-  <div class="foot-brand">ISAAC STORE</div>
-  <div class="social-row">
+  <div class="f-brand">ISAAC STORE</div>
+  <div class="soc-row">
     <a href="https://instagram.com/isaac._store" target="_blank" style="color:#E1306C">
-      <svg width="24" height="24"><use href="#ico-insta"/></svg>
+      <svg width="26" height="26"><use href="#i-insta"/></svg>
     </a>
     <a href="https://wa.me/213777668129" target="_blank" style="color:#25d366">
-      <svg width="24" height="24"><use href="#ico-wa"/></svg>
+      <svg width="26" height="26"><use href="#i-wa"/></svg>
     </a>
     <a href="https://www.tiktok.com/@isaac._store" target="_blank">
-      <svg width="22" height="22"><use href="#ico-tiktok"/></svg>
+      <svg width="22" height="22"><use href="#i-tiktok"/></svg>
     </a>
   </div>
   <p>REDEFINING ALGERIAN LUXURY<br>شريك التوصيل: IMIR Logistics — 69 ولاية<br>📞 0777 668 129</p>
-  <p style="margin-top:13px;font-size:.58rem;color:rgba(255,255,255,.12)">© 2025 ISAAC STORE — جميع الحقوق محفوظة</p>
+  <p style="margin-top:11px;font-size:.55rem;color:rgba(255,255,255,.1)">© 2025 ISAAC STORE — جميع الحقوق محفوظة</p>
 </footer>
 
-<!-- ===== WA FLOAT ===== -->
+<!-- WA FLOAT -->
 <a href="https://wa.me/213777668129" target="_blank" class="wa-float">
-  <svg width="30" height="30"><use href="#ico-wa"/></svg>
+  <svg width="28" height="28"><use href="#i-wa"/></svg>
 </a>
 
-<!-- ========== MODALS ========== -->
+<!-- TOAST -->
+<div id="toast"></div>
 
-<!-- Wilayas -->
+<!-- ============ MODALS ============ -->
+
+<!-- WILAYAS -->
 <div class="overlay center" id="wilayasModal">
   <div class="sheet rounded">
-    <div class="sheet-handle"></div>
-    <h2>
-      <svg width="20" height="20" style="color:#4ade80"><use href="#ico-truck"/></svg>
-      IMIR Logistics — 69 ولاية 🇩🇿
-    </h2>
-    <p style="font-size:.72rem;color:#4ade80;font-weight:700;margin-bottom:10px">✅ التوصيل متاح في كامل التراب الوطني</p>
-    <div class="wilayas-grid" id="wilayasGrid"></div>
-    <button class="btn btn-dark" onclick="closeModals()" style="margin-top:14px">إغلاق</button>
+    <div class="s-handle"></div>
+    <h2><svg width="20" height="20" style="color:var(--green)"><use href="#i-truck"/></svg> IMIR Logistics — 69 ولاية 🇩🇿</h2>
+    <p style="font-size:.72rem;color:var(--green);font-weight:700;margin-bottom:10px">✅ التوصيل متاح في كامل التراب الوطني</p>
+    <div class="w-grid" id="wilayasGrid"></div>
+    <button class="btn btn-dark" onclick="closeModals()" style="margin-top:13px">إغلاق</button>
   </div>
 </div>
 
-<!-- Order -->
+<!-- ORDER -->
 <div class="overlay" id="orderModal">
   <div class="sheet">
-    <div class="sheet-handle"></div>
-    <h2>
-      <svg width="20" height="20" style="color:var(--gold)"><use href="#ico-bag"/></svg>
-      إتمام الطلب
-    </h2>
-    <div class="order-pinfo" id="orderInfo"></div>
-    <input class="inp" type="text" id="custName" placeholder="الاسم الكامل *">
-    <input class="inp" type="tel" id="custPhone" placeholder="رقم الهاتف *">
-    <select class="inp" id="custState"><option value="">اختر الولاية (69 ولاية) *</option></select>
-    <input class="inp" type="text" id="custAddr" placeholder="البلدية والعنوان التفصيلي *">
-    <input class="inp" type="number" id="custQty" placeholder="الكمية" value="1" min="1">
+    <div class="s-handle"></div>
+    <h2><svg width="20" height="20" style="color:var(--gold)"><use href="#i-bag"/></svg> إتمام الطلب</h2>
+    <div class="o-pinfo" id="orderInfo"></div>
+    <span class="inp-lbl">الاسم الكامل *</span>
+    <input class="inp" type="text" id="custName" placeholder="محمد الأمين بن...">
+    <span class="inp-lbl">رقم الهاتف *</span>
+    <input class="inp" type="tel" id="custPhone" placeholder="05XX XXX XXX">
+    <span class="inp-lbl">الولاية *</span>
+    <select class="inp" id="custState"><option value="">اختر الولاية...</option></select>
+    <span class="inp-lbl">العنوان التفصيلي *</span>
+    <input class="inp" type="text" id="custAddr" placeholder="البلدية، الحي، الشارع...">
+    <span class="inp-lbl">الكمية</span>
+    <input class="inp" type="number" id="custQty" value="1" min="1">
     <button class="btn btn-gold" onclick="sendWA()">
-      <svg width="20" height="20"><use href="#ico-wa"/></svg>
-      تأكيد عبر واتساب
+      <svg width="20" height="20"><use href="#i-wa"/></svg> تأكيد الطلب عبر واتساب
     </button>
     <button class="btn btn-dark" onclick="closeModals()">إلغاء</button>
   </div>
 </div>
 
-<!-- Admin Login -->
+<!-- ADMIN LOGIN -->
 <div class="overlay center" id="loginModal">
   <div class="sheet rounded">
-    <div class="sheet-handle"></div>
-    <h2><svg width="20" height="20" style="color:var(--gold)"><use href="#ico-lock"/></svg> دخول الإدارة</h2>
-    <input class="inp" type="password" id="adminPass" placeholder="رمز الدخول" onkeydown="if(event.key==='Enter')checkPass()">
+    <div class="s-handle"></div>
+    <h2><svg width="20" height="20" style="color:var(--gold)"><use href="#i-lock"/></svg> دخول الإدارة</h2>
+    <input class="inp" type="password" id="adminPass" placeholder="رمز الدخول السري" onkeydown="if(event.key==='Enter')checkPass()">
     <button class="btn btn-gold" onclick="checkPass()">
-      <svg width="17" height="17"><use href="#ico-check"/></svg> دخول
+      <svg width="17" height="17"><use href="#i-check"/></svg> دخول
     </button>
     <button class="btn btn-dark" onclick="closeModals()">إغلاق</button>
   </div>
 </div>
 
-<!-- Admin Options -->
+<!-- ADMIN OPTIONS -->
 <div class="overlay center" id="optionsModal">
   <div class="sheet rounded">
-    <div class="sheet-handle"></div>
-    <h2><svg width="20" height="20" style="color:var(--gold)"><use href="#ico-settings"/></svg> لوحة التحكم</h2>
+    <div class="s-handle"></div>
+    <h2>
+      <svg width="20" height="20" style="color:var(--gold)"><use href="#i-cog"/></svg>
+      لوحة التحكم
+      <span class="status-dot" id="statusDot"></span>
+    </h2>
+
+    <!-- Google Sheets Setup -->
+    <div class="sheet-url-wrap" id="sheetsSetupWrap">
+      <p style="font-weight:800;color:rgba(255,255,255,.7);margin-bottom:8px;font-size:.8rem">
+        <svg class="ico" width="18" height="18"><use href="#i-sheets"/></svg>
+        ربط Google Sheets
+      </p>
+      <div class="step"><div class="step-num">1</div><div class="step-txt">افتح <strong style="color:var(--gold)">script.google.com</strong> وأنشئ مشروعاً جديداً</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-txt">الصق كود <strong style="color:var(--gold)">google_apps_script.gs</strong> وانشره كـ Web App (Anyone)</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-txt">انسخ رابط الـ Web App والصقه هنا 👇</div></div>
+      <input class="inp" type="url" id="scriptUrl" placeholder="https://script.google.com/macros/s/.../exec" style="margin-top:6px">
+      <button class="btn btn-gold" onclick="saveScriptUrl()" style="margin-top:4px">
+        <svg width="17" height="17"><use href="#i-link"/></svg> حفظ الرابط وتفعيل
+      </button>
+    </div>
+
     <button class="btn btn-gold" onclick="openAdd()">
-      <svg width="17" height="17"><use href="#ico-plus"/></svg> إضافة منتج جديد
+      <svg width="17" height="17"><use href="#i-plus"/></svg> إضافة منتج جديد
     </button>
-    <button class="btn btn-red" onclick="openDelete()">
-      <svg width="17" height="17"><use href="#ico-trash"/></svg> حذف منتج
+    <button class="btn btn-dark" onclick="openDelete()">
+      <svg width="17" height="17"><use href="#i-trash"/></svg> إدارة / حذف المنتجات
     </button>
-    <button class="btn btn-dark" onclick="closeModals()">خروج</button>
+    <button class="btn btn-dark" onclick="loadProducts();showToast('🔄 جاري التحديث...')">
+      <svg width="17" height="17"><use href="#i-refresh"/></svg> تحديث المنتجات
+    </button>
+    <button class="btn btn-dark" onclick="openEditUrl()">
+      <svg width="17" height="17"><use href="#i-edit"/></svg> تعديل رابط Google Sheets
+    </button>
+    <button class="btn btn-dark" onclick="closeModals()" style="margin-top:5px">خروج</button>
   </div>
 </div>
 
-<!-- Add Product -->
+<!-- ADD PRODUCT -->
 <div class="overlay center" id="addModal">
   <div class="sheet rounded">
-    <div class="sheet-handle"></div>
-    <h2><svg width="20" height="20" style="color:var(--gold)"><use href="#ico-plus"/></svg> إضافة منتج</h2>
-    <input class="inp" type="text" id="pName" placeholder="اسم المنتج *">
-    <input class="inp" type="number" id="pPrice" placeholder="السعر بالدينار DA *">
+    <div class="s-handle"></div>
+    <h2><svg width="20" height="20" style="color:var(--gold)"><use href="#i-plus"/></svg> إضافة منتج جديد</h2>
+    <span class="inp-lbl">اسم المنتج *</span>
+    <input class="inp" type="text" id="pName" placeholder="مثال: ساعة G-Shock Pro">
+    <span class="inp-lbl">السعر بالدينار DA *</span>
+    <input class="inp" type="number" id="pPrice" placeholder="مثال: 4500">
+    <span class="inp-lbl">الصنف *</span>
     <select class="inp" id="pCat">
       <option value="نضارات مoto">🥽 نضارات Moto</option>
       <option value="ساعات">⌚ ساعات</option>
@@ -401,204 +469,377 @@ footer p{font-size:.68rem;color:rgba(255,255,255,.28);line-height:1.9}
       <option value="اكسسوارات">💎 اكسسوارات</option>
       <option value="حقائب">👜 حقائب</option>
     </select>
-    <input class="inp" type="text" id="pBadge" placeholder="شارة (مثال: جديد) — اختياري">
+    <span class="inp-lbl">شارة خاصة (اختياري)</span>
+    <input class="inp" type="text" id="pBadge" placeholder="مثال: جديد / خصم 20% / الأكثر مبيعاً">
+    <span class="inp-lbl">صورة المنتج *</span>
     <label class="file-lbl" for="pImg">
-      <svg class="icon-svg" width="28" height="28" style="color:rgba(201,168,76,.65);margin-bottom:6px"><use href="#ico-cam"/></svg><br>
-      اختر صورة المنتج
+      <svg class="ico" width="26" height="26" style="color:rgba(201,168,76,.55);margin-bottom:5px"><use href="#i-cam"/></svg><br>
+      اختر صورة من هاتفك أو جهازك
       <input type="file" id="pImg" accept="image/*" style="display:none" onchange="previewImg()">
     </label>
     <img id="imgPreview" class="img-preview" alt="preview">
-    <button class="btn btn-gold" onclick="saveProduct()">
-      <svg width="17" height="17"><use href="#ico-check"/></svg> نشر المنتج
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <button class="btn btn-gold" id="saveBtn" onclick="saveProduct()">
+      <svg width="17" height="17"><use href="#i-check"/></svg> نشر المنتج على المتجر
     </button>
     <button class="btn btn-dark" onclick="openOptions()">رجوع</button>
   </div>
 </div>
 
-<!-- Delete Modal -->
+<!-- DELETE / MANAGE -->
 <div class="overlay center" id="deleteModal">
   <div class="sheet rounded">
-    <div class="sheet-handle"></div>
-    <h2><svg width="20" height="20" style="color:#f87171"><use href="#ico-trash"/></svg> حذف المنتجات</h2>
-    <div class="del-list" id="delList"></div>
+    <div class="s-handle"></div>
+    <h2><svg width="20" height="20" style="color:#f87171"><use href="#i-trash"/></svg> إدارة المنتجات</h2>
+    <div class="del-list" id="delList">
+      <p style="color:rgba(255,255,255,.3);text-align:center;padding:20px;font-size:.8rem">جاري التحميل...</p>
+    </div>
     <button class="btn btn-dark" onclick="openOptions()">رجوع</button>
   </div>
 </div>
 
 <script>
-const WILAYAS=["01 أدرار","02 الشلف","03 الأغواط","04 أم البواقي","05 باتنة","06 بجاية","07 بسكرة","08 بشار","09 البليدة","10 البويرة","11 تمنراست","12 تبسة","13 تلمسان","14 تيارت","15 تيزي وزو","16 الجزائر","17 الجلفة","18 جيجل","19 سطيف","20 سعيدة","21 سكيكدة","22 سيدي بلعباس","23 عنابة","24 قالمة","25 قسنطينة","26 المدية","27 مستغانم","28 المسيلة","29 معسكر","30 ورقلة","31 وهران","32 البيض","33 إليزي","34 برج بوعريريج","35 بومرداس","36 الطارف","37 تندوف","38 تيسمسيلت","39 الوادي","40 خنشلة","41 سوق أهراس","42 تيبازة","43 ميلة","44 عين الدفلى","45 النعامة","46 عين تموشنت","47 غرداية","48 غليزان","49 تيميمون","50 تبلبالة","51 بني عباس","52 عين صالح","53 عين قزام","54 تقرت","55 جانت","56 المغير","57 المنيعة","58 برج باجي مختار","59 أولاد جلال","60 بئر العاتر","61 سيدي بلعباس الجنوبية","62 الشريعة","63 رأس الوادي","64 سبدو","65 وادي ميزاب","66 تاهدمت","67 المقرن","68 وادي الشلف","69 تيارت الجنوبية"];
-const WA="213777668129";
-let db=JSON.parse(localStorage.getItem('isaac_v2'))||defaultProducts();
-let tempImg="",activeP=null,curFilter='all';
+// =================== CONFIG ===================
+const WA_NUMBER = "213777668129";
+const ADMIN_PASS = "isaac2025";
+const WILAYAS = ["01 أدرار","02 الشلف","03 الأغواط","04 أم البواقي","05 باتنة","06 بجاية","07 بسكرة","08 بشار","09 البليدة","10 البويرة","11 تمنراست","12 تبسة","13 تلمسان","14 تيارت","15 تيزي وزو","16 الجزائر","17 الجلفة","18 جيجل","19 سطيف","20 سعيدة","21 سكيكدة","22 سيدي بلعباس","23 عنابة","24 قالمة","25 قسنطينة","26 المدية","27 مستغانم","28 المسيلة","29 معسكر","30 ورقلة","31 وهران","32 البيض","33 إليزي","34 برج بوعريريج","35 بومرداس","36 الطارف","37 تندوف","38 تيسمسيلت","39 الوادي","40 خنشلة","41 سوق أهراس","42 تيبازة","43 ميلة","44 عين الدفلى","45 النعامة","46 عين تموشنت","47 غرداية","48 غليزان","49 تيميمون","50 تبلبالة","51 بني عباس","52 عين صالح","53 عين قزام","54 تقرت","55 جانت","56 المغير","57 المنيعة","58 برج باجي مختار","59 أولاد جلال","60 بئر العاتر","61 عين تموشنت الغربية","62 الشريعة","63 رأس الوادي","64 سبدو","65 وادي ميزاب","66 تاهدمت","67 المقرن","68 وادي الشلف","69 تيارت الجنوبية"];
 
-function defaultProducts(){return[
-  {id:1,name:"نضارة Moto X-Racing Pro",price:"3500",cat:"نضارات مoto",badge:"جديد",img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80"},
-  {id:2,name:"ساعة G-Shock Combat",price:"8900",cat:"ساعات",badge:"الأكثر مبيعاً",img:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80"},
-  {id:3,name:"قبعة Street Style Cap",price:"1800",cat:"قبعات",badge:"",img:"https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&q=80"},
-  {id:4,name:"نضارة Oakley Moto Shield",price:"4200",cat:"نضارات مoto",badge:"",img:"https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400&q=80"},
-  {id:5,name:"ساعة Casio Skeleton",price:"12500",cat:"ساعات",badge:"فاخر",img:"https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?w=400&q=80"},
-  {id:6,name:"نضارة شمسية Retro Wave",price:"2200",cat:"نضارات شمسية",badge:"صيف 2025",img:"https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&q=80"},
-  {id:7,name:"قبعة ISAAC Logo Cap",price:"2100",cat:"قبعات",badge:"",img:"https://images.unsplash.com/photo-1521369909029-2afed882baee?w=400&q=80"},
-  {id:8,name:"نضارة Aviator Gold",price:"3100",cat:"نضارات شمسية",badge:"",img:"https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=400&q=80"},
-  {id:9,name:"حقيبة Biker Waist Pack",price:"4500",cat:"حقائب",badge:"",img:"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80"},
-  {id:10,name:"سلسلة Stainless Steel",price:"2800",cat:"اكسسوارات",badge:"جديد",img:"https://images.unsplash.com/photo-1535632066027-73b6e3576a0e?w=400&q=80"},
-];}
+// =================== STATE ===================
+let SCRIPT_URL = localStorage.getItem('isaac_script_url') || '';
+let products = [];
+let tempImg = "";
+let activeP = null;
+let curFilter = 'all';
+let isLoading = false;
 
-function save(){localStorage.setItem('isaac_v2',JSON.stringify(db));}
+// =================== TOAST ===================
+let toastTimer;
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.className = '', 3000);
+}
 
-function render(f){
-  const g=document.getElementById('productGrid');
-  const t=document.getElementById('gridTitle');
-  const list=f&&f!=='all'?db.filter(p=>p.cat===f):db;
-  t.textContent=f&&f!=='all'?f.toUpperCase():'COLLECTION';
-  if(!list.length){g.innerHTML=`<div class="empty-state"><svg width="48" height="48"><use href="#ico-box"/></svg><p>لا توجد منتجات في هذا الصنف</p></div>`;return;}
-  g.innerHTML=list.map(p=>`
-    <div class="prod-card" onclick="openOrder(${p.id})">
-      ${p.badge?`<div class="prod-badge">${p.badge}</div>`:''}
-      <div class="prod-img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy"></div>
-      <div class="prod-cat-lbl">${p.cat}</div>
+// =================== API CALLS ===================
+async function apiCall(action, data = {}) {
+  if (!SCRIPT_URL) throw new Error('No script URL configured');
+  const body = JSON.stringify({ action, ...data });
+  // Google Apps Script needs POST with action param
+  const url = action === 'get' ? SCRIPT_URL + '?action=get' : SCRIPT_URL;
+  const opts = action === 'get'
+    ? { method: 'GET' }
+    : { method: 'POST', body, headers: { 'Content-Type': 'text/plain' } };
+  const res = await fetch(url, opts);
+  if (!res.ok) throw new Error('Network error ' + res.status);
+  return res.json();
+}
+
+// =================== LOAD PRODUCTS ===================
+async function loadProducts() {
+  if (!SCRIPT_URL) {
+    renderEmpty('لم يتم ربط المتجر بعد — اضغط على اسم المتجر للإعداد');
+    return;
+  }
+  showSkeleton();
+  try {
+    const result = await apiCall('get');
+    if (result.success) {
+      products = result.products || [];
+      render(curFilter);
+      updateStatusDot(true);
+    } else {
+      throw new Error(result.error);
+    }
+  } catch (e) {
+    console.error(e);
+    updateStatusDot(false);
+    renderEmpty('تعذّر تحميل المنتجات. تحقق من الاتصال أو رابط Google Sheets.');
+    showToast('❌ خطأ في التحميل', 'error');
+  }
+}
+
+// =================== RENDER ===================
+function showSkeleton() {
+  const g = document.getElementById('productGrid');
+  g.innerHTML = `<div class="skeleton-grid">${Array(4).fill(`
+    <div class="skeleton-card">
+      <div class="skel skel-img"></div>
+      <div class="skel skel-line"></div>
+      <div class="skel skel-line2"></div>
+      <div class="skel skel-btn"></div>
+    </div>`).join('')}</div>`;
+}
+
+function renderEmpty(msg = 'لا توجد منتجات في هذا الصنف بعد') {
+  document.getElementById('productGrid').innerHTML = `
+    <div class="empty-state">
+      <span class="big-ico">🛍️</span>
+      <h3>المتجر فارغ حالياً</h3>
+      <p>${msg}</p>
+    </div>`;
+}
+
+function render(f) {
+  const g = document.getElementById('productGrid');
+  const t = document.getElementById('gridTitle');
+  const list = f && f !== 'all' ? products.filter(p => p.cat === f) : products;
+  t.textContent = f && f !== 'all' ? f.toUpperCase() : 'COLLECTION';
+  if (!list.length) { renderEmpty(); return; }
+  g.innerHTML = `<div class="prod-grid">${list.map(p => `
+    <div class="prod-card" onclick="openOrder('${p.id}')">
+      ${p.badge ? `<div class="prod-badge">${p.badge}</div>` : ''}
+      <div class="prod-img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect fill=%22%23111%22 width=%22100%22 height=%22100%22/%3E%3Ctext fill=%22%23555%22 font-size=%2230%22 x=%2250%22 y=%2255%22 text-anchor=%22middle%22%3E📦%3C/text%3E%3C/svg%3E'"></div>
+      <div class="prod-cat">${p.cat}</div>
       <div class="prod-name">${p.name}</div>
       <div class="prod-price">${Number(p.price).toLocaleString()} <span>DA</span></div>
-      <button class="buy-btn" onclick="event.stopPropagation();openOrder(${p.id})">
-        <svg width="16" height="16"><use href="#ico-bag"/></svg> أطلب الآن
+      <button class="buy-btn" onclick="event.stopPropagation();openOrder('${p.id}')">
+        <svg class="ico" width="16" height="16"><use href="#i-bag"/></svg> أطلب الآن
+      </button>
+    </div>`).join('')}</div>`;
+}
+
+function setFilter(f, btn) {
+  curFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  render(f);
+}
+
+function enterCat(cat) {
+  document.getElementById('splash').classList.remove('show');
+  curFilter = cat;
+  render(cat);
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    if (cat === 'all') { if (b.textContent.trim().startsWith('🛍')) b.classList.add('active'); else b.classList.remove('active'); }
+    else { b.classList.remove('active'); if (b.getAttribute('onclick') && b.getAttribute('onclick').includes(`'${cat}'`)) b.classList.add('active'); }
+  });
+}
+
+// =================== STATUS DOT ===================
+function updateStatusDot(ok) {
+  const d = document.getElementById('statusDot');
+  if (!d) return;
+  d.className = 'status-dot ' + (ok ? 'connected' : 'error');
+}
+
+// =================== SCRIPT URL ===================
+function saveScriptUrl() {
+  const url = document.getElementById('scriptUrl').value.trim();
+  if (!url || !url.includes('script.google.com')) {
+    showToast('❌ الرابط غير صحيح', 'error'); return;
+  }
+  SCRIPT_URL = url;
+  localStorage.setItem('isaac_script_url', url);
+  document.getElementById('setupBanner').style.display = 'none';
+  showToast('✅ تم الحفظ! جاري التحميل...', 'success');
+  closeModals();
+  loadProducts();
+}
+
+function openEditUrl() {
+  document.getElementById('scriptUrl').value = SCRIPT_URL || '';
+  document.getElementById('sheetsSetupWrap').scrollIntoView({ behavior: 'smooth' });
+}
+
+// =================== WILAYAS ===================
+function openWilayas() {
+  document.getElementById('wilayasGrid').innerHTML = WILAYAS.map(w => `<div class="w-chip">${w}</div>`).join('');
+  document.getElementById('wilayasModal').classList.add('show');
+}
+
+// Populate state select
+(function () {
+  const s = document.getElementById('custState');
+  WILAYAS.forEach(w => { const o = document.createElement('option'); o.value = w; o.textContent = w; s.appendChild(o); });
+})();
+
+// =================== ORDER ===================
+function openOrder(id) {
+  activeP = products.find(p => String(p.id) === String(id));
+  if (!activeP) return;
+  document.getElementById('orderInfo').innerHTML = `
+    <img src="${activeP.img}" alt="${activeP.name}" onerror="this.style.display='none'">
+    <div><h4>${activeP.name}</h4><p>${Number(activeP.price).toLocaleString()} DA</p></div>`;
+  document.getElementById('orderModal').classList.add('show');
+}
+
+function sendWA() {
+  const n = document.getElementById('custName').value.trim();
+  const p = document.getElementById('custPhone').value.trim();
+  const s = document.getElementById('custState').value;
+  const a = document.getElementById('custAddr').value.trim();
+  const q = document.getElementById('custQty').value || 1;
+  if (!n || !p || !s || !a) { showToast('⚠️ يرجى ملء جميع الحقول', 'error'); return; }
+  const total = (Number(activeP.price) * Number(q)).toLocaleString();
+  const msg = `🛍️ طلب جديد — ISAAC STORE\n${'─'.repeat(26)}\n📦 المنتج: ${activeP.name}\n💰 الإجمالي: ${total} DA (×${q})\n${'─'.repeat(26)}\n👤 الاسم: ${n}\n📞 الهاتف: ${p}\n📍 الولاية: ${s}\n🏠 العنوان: ${a}\n${'─'.repeat(26)}\n🚚 الشحن: IMIR Logistics\n✅ أرجو التأكيد، شكراً!`;
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+  closeModals();
+}
+
+// =================== ADMIN ===================
+function openAdminLogin() { document.getElementById('loginModal').classList.add('show'); }
+function openOptions() {
+  closeModals();
+  document.getElementById('optionsModal').classList.add('show');
+  document.getElementById('scriptUrl').value = SCRIPT_URL || '';
+  updateStatusDot(!!SCRIPT_URL);
+}
+function openAdd() { closeModals(); document.getElementById('addModal').classList.add('show'); }
+function openDelete() {
+  closeModals();
+  document.getElementById('deleteModal').classList.add('show');
+  renderDelList();
+}
+function closeModals() { document.querySelectorAll('.overlay').forEach(o => o.classList.remove('show')); }
+
+function checkPass() {
+  if (document.getElementById('adminPass').value === ADMIN_PASS) {
+    document.getElementById('adminPass').value = '';
+    openOptions();
+  } else {
+    showToast('❌ رمز خاطئ!', 'error');
+    document.getElementById('adminPass').value = '';
+  }
+}
+
+// =================== ADD PRODUCT ===================
+function previewImg() {
+  const f = document.getElementById('pImg').files[0];
+  if (!f) return;
+
+  // Compress image before upload
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const MAX = 800;
+      let w = img.width, h = img.height;
+      if (w > MAX) { h = h * MAX / w; w = MAX; }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      tempImg = canvas.toDataURL('image/jpeg', 0.75);
+      const prev = document.getElementById('imgPreview');
+      prev.src = tempImg; prev.style.display = 'block';
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(f);
+}
+
+async function saveProduct() {
+  const n = document.getElementById('pName').value.trim();
+  const p = document.getElementById('pPrice').value.trim();
+  const cat = document.getElementById('pCat').value;
+  const badge = document.getElementById('pBadge').value.trim();
+  if (!n || !p || !tempImg) { showToast('⚠️ أكمل الاسم والسعر والصورة', 'error'); return; }
+  if (!SCRIPT_URL) { showToast('❌ لم يتم ربط Google Sheets بعد', 'error'); return; }
+
+  const btn = document.getElementById('saveBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ جاري النشر...';
+  document.getElementById('progressWrap').style.display = 'block';
+
+  // Simulate progress
+  let prog = 0;
+  const pInt = setInterval(() => {
+    prog = Math.min(prog + 15, 85);
+    document.getElementById('progressBar').style.width = prog + '%';
+  }, 200);
+
+  try {
+    const result = await apiCall('add', { name: n, price: p, cat, badge, img: tempImg });
+    clearInterval(pInt);
+    document.getElementById('progressBar').style.width = '100%';
+
+    if (result.success) {
+      showToast('✅ تم نشر المنتج بنجاح!', 'success');
+      ['pName', 'pPrice', 'pBadge'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('imgPreview').style.display = 'none';
+      document.getElementById('progressWrap').style.display = 'none';
+      tempImg = '';
+      await loadProducts();
+      openOptions();
+    } else {
+      throw new Error(result.error);
+    }
+  } catch (err) {
+    clearInterval(pInt);
+    showToast('❌ فشل النشر: ' + err.message, 'error');
+    console.error(err);
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<svg class="ico" width="17" height="17"><use href="#i-check"/></svg> نشر المنتج على المتجر';
+  document.getElementById('progressBar').style.width = '0%';
+}
+
+// =================== DELETE LIST ===================
+function renderDelList() {
+  const list = document.getElementById('delList');
+  if (!products.length) {
+    list.innerHTML = '<p style="color:rgba(255,255,255,.3);text-align:center;padding:25px;font-size:.78rem">لا توجد منتجات</p>';
+    return;
+  }
+  list.innerHTML = products.map(p => `
+    <div class="del-item" id="ditem-${p.id}">
+      <div class="del-item-info">
+        <div class="del-item-name">${p.name}</div>
+        <div class="del-item-price">${Number(p.price).toLocaleString()} DA — ${p.cat}</div>
+      </div>
+      <button onclick="deleteProduct('${p.id}')">
+        <svg width="14" height="14"><use href="#i-trash"/></svg> حذف
       </button>
     </div>`).join('');
 }
 
-function setFilter(f,btn){
-  curFilter=f;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  if(btn)btn.classList.add('active');
-  render(f);
+async function deleteProduct(id) {
+  if (!confirm('هل تريد حذف هذا المنتج نهائياً؟')) return;
+  try {
+    const el = document.getElementById('ditem-' + id);
+    if (el) el.style.opacity = '.4';
+    const result = await apiCall('delete', { id });
+    if (result.success) {
+      showToast('🗑️ تم حذف المنتج', 'success');
+      products = products.filter(p => String(p.id) !== String(id));
+      render(curFilter);
+      renderDelList();
+    } else throw new Error(result.error);
+  } catch (e) {
+    showToast('❌ فشل الحذف', 'error');
+    const el = document.getElementById('ditem-' + id);
+    if (el) el.style.opacity = '1';
+  }
 }
 
-function enterCat(cat){
-  document.getElementById('splash').classList.remove('show');
-  setFilter(cat, cat==='all'?document.querySelector('.filter-btn'):null);
-  if(cat==='all')document.querySelector('.filter-btn').classList.add('active');
-}
+// =================== TIMER ===================
+let th = 2, tm = 45, ts = 0;
+setInterval(() => {
+  ts--; if (ts < 0) { ts = 59; tm--; } if (tm < 0) { tm = 59; th--; } if (th < 0) th = 23;
+  document.getElementById('t-s').textContent = String(ts).padStart(2, '0');
+  document.getElementById('t-m').textContent = String(tm).padStart(2, '0');
+  document.getElementById('t-h').textContent = String(th).padStart(2, '0');
+}, 1000);
 
-// Wilayas
-function openWilayas(){
-  document.getElementById('wilayasGrid').innerHTML=WILAYAS.map(w=>`<div class="w-chip">${w}</div>`).join('');
-  document.getElementById('wilayasModal').classList.add('show');
-}
-(function(){const s=document.getElementById('custState');WILAYAS.forEach(w=>{const o=document.createElement('option');o.value=w;o.textContent=w;s.appendChild(o);});})();
-
-// Order
-function openOrder(id){
-  activeP=db.find(p=>p.id===id);if(!activeP)return;
-  document.getElementById('orderInfo').innerHTML=`<img src="${activeP.img}" alt="${activeP.name}"><div><h4>${activeP.name}</h4><p>${Number(activeP.price).toLocaleString()} DA</p></div>`;
-  document.getElementById('orderModal').classList.add('show');
-}
-function sendWA(){
-  const n=document.getElementById('custName').value.trim();
-  const p=document.getElementById('custPhone').value.trim();
-  const s=document.getElementById('custState').value;
-  const a=document.getElementById('custAddr').value.trim();
-  const q=document.getElementById('custQty').value||1;
-  if(!n||!p||!s||!a){alert('⚠️ يرجى ملء جميع الحقول');return;}
-  const total=(Number(activeP.price)*Number(q)).toLocaleString();
-  const msg=`🛍️ طلب جديد — ISAAC STORE\n${'─'.repeat(28)}\n📦 المنتج: ${activeP.name}\n💰 الإجمالي: ${total} DA (×${q})\n${'─'.repeat(28)}\n👤 الاسم: ${n}\n📞 الهاتف: ${p}\n📍 الولاية: ${s}\n🏠 العنوان: ${a}\n${'─'.repeat(28)}\n🚚 الشحن: IMIR Logistics\n✅ أرجو التأكيد. شكراً!`;
-  window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`,'_blank');
-  closeModals();
-}
-
-// Admin
-function openAdminLogin(){document.getElementById('loginModal').classList.add('show');}
-function openOptions(){closeModals();document.getElementById('optionsModal').classList.add('show');}
-function openAdd(){closeModals();document.getElementById('addModal').classList.add('show');}
-function openDelete(){closeModals();renderDel();document.getElementById('deleteModal').classList.add('show');}
-function closeModals(){document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('show'));}
-function checkPass(){if(document.getElementById('adminPass').value==='isaac2025'){openOptions();}else{alert('❌ رمز خاطئ!');document.getElementById('adminPass').value='';}}
-function previewImg(){
-  const f=document.getElementById('pImg').files[0];if(!f)return;
-  const r=new FileReader();r.onloadend=()=>{tempImg=r.result;const p=document.getElementById('imgPreview');p.src=tempImg;p.style.display='block';};r.readAsDataURL(f);
-}
-function saveProduct(){
-  const n=document.getElementById('pName').value.trim();
-  const p=document.getElementById('pPrice').value.trim();
-  const c=document.getElementById('pCat').value;
-  const b=document.getElementById('pBadge').value.trim();
-  if(!n||!p||!tempImg){alert('⚠️ أكمل البيانات واختر صورة');return;}
-  db.unshift({id:Date.now(),name:n,price:p,cat:c,badge:b,img:tempImg});
-  save();render(curFilter);openOptions();
-  ['pName','pPrice','pBadge'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('imgPreview').style.display='none';tempImg='';
-}
-function renderDel(){
-  const l=document.getElementById('delList');
-  l.innerHTML=db.map(p=>`<div class="del-item"><span>${p.name} — ${Number(p.price).toLocaleString()} DA</span><button onclick="delP(${p.id})">حذف</button></div>`).join('')||'<p style="color:rgba(255,255,255,.3);text-align:center;padding:20px">لا توجد منتجات</p>';
-}
-function delP(id){if(!confirm('حذف هذا المنتج؟'))return;db=db.filter(p=>p.id!==id);save();render(curFilter);renderDel();}
-
-// Timer
-let th=2,tm=45,ts=0;
-setInterval(()=>{ts--;if(ts<0){ts=59;tm--;}if(tm<0){tm=59;th--;}if(th<0)th=23;
-  document.getElementById('t-s').textContent=String(ts).padStart(2,'0');
-  document.getElementById('t-m').textContent=String(tm).padStart(2,'0');
-  document.getElementById('t-h').textContent=String(th).padStart(2,'0');
-},1000);
-
-// Overlay close on backdrop click
-document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)closeModals();}));
-
-// Init
-window.addEventListener('load',()=>{
-  setTimeout(()=>{
+// =================== INIT ===================
+window.addEventListener('load', () => {
+  setTimeout(() => {
     document.getElementById('loader').classList.add('hide');
-    setTimeout(()=>document.getElementById('splash').classList.add('show'),350);
-  },1800);
+    setTimeout(() => document.getElementById('splash').classList.add('show'), 350);
+  }, 1600);
+  if (!SCRIPT_URL) {
+    document.getElementById('setupBanner').style.display = 'block';
+  }
+  loadProducts();
 });
-render('all');
-// --- إعدادات الربط (ضع بياناتك هنا من Supabase) ---
-const SUPABASE_URL = 'https://ghecyufqmmbkvitkmpsy.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_DboiSxyR0VvQmKUp6BQOzQ_Kv3obPsN';
 
-// دالة جلب المنتجات من قاعدة البيانات (تزامن لحظي)
-async function fetchProducts() {
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/products?select=*`, {
-        headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`
-        }
-    });
-    const data = await response.json();
-    db = data; // تحديث القائمة المحلية بالبيانات السحابية
-    render();
-}
-
-// دالة حفظ منتج جديد في السحاب
-async function saveProductToCloud(product) {
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/products`, {
-        method: 'POST',
-        headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': 'application/json',
-            'Prefer': 'return=minimal'
-        },
-        body: JSON.stringify(product)
-    });
-
-    if (response.ok) {
-        fetchProducts(); // إعادة جلب البيانات لتظهر للجميع فوراً
-    }
-}
-
-// دالة حذف منتج من السحاب
-async function deleteProductFromCloud(productName) {
-    await fetch(`${SUPABASE_URL}/rest/v1/products?name=eq.${productName}`, {
-        method: 'DELETE',
-        headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`
-        }
-    });
-    fetchProducts();
-}
-
+document.querySelectorAll('.overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) closeModals(); });
+});
 </script>
 </body>
 </html>
-  
