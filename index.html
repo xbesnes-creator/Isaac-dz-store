@@ -551,6 +551,53 @@ window.addEventListener('load',()=>{
   },1800);
 });
 render('all');
+// --- إعدادات الربط (ضع بياناتك هنا من Supabase) ---
+const SUPABASE_URL = 'https://ghecyufqmmbkvitkmpsy.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_DboiSxyR0VvQmKUp6BQOzQ_Kv3obPsN';
+
+// دالة جلب المنتجات من قاعدة البيانات (تزامن لحظي)
+async function fetchProducts() {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/products?select=*`, {
+        headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+        }
+    });
+    const data = await response.json();
+    db = data; // تحديث القائمة المحلية بالبيانات السحابية
+    render();
+}
+
+// دالة حفظ منتج جديد في السحاب
+async function saveProductToCloud(product) {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/products`, {
+        method: 'POST',
+        headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(product)
+    });
+
+    if (response.ok) {
+        fetchProducts(); // إعادة جلب البيانات لتظهر للجميع فوراً
+    }
+}
+
+// دالة حذف منتج من السحاب
+async function deleteProductFromCloud(productName) {
+    await fetch(`${SUPABASE_URL}/rest/v1/products?name=eq.${productName}`, {
+        method: 'DELETE',
+        headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+        }
+    });
+    fetchProducts();
+}
+
 </script>
 </body>
 </html>
